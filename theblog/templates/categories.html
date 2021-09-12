@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>{{ cats }}</h1>
+
+{% if category_posts %}
+	<ul>
+	{% for post in category_posts %}
+
+	<li><a href="{% url 'article-detail' post.pk %}">{{ post.title }}</a> - {{ post.author.first_name }} {{ post.author.last_name }} - {{post.post_date}}
+			<small>
+				{% if user.is_authenticated %}
+				 - <a href="{% url 'update_post' post.pk %}">(Edit)</a>
+				<a href="{% url 'delete_post' post.pk %}">(Delete)</a>
+				{% endif %}
+			</small>
+	</li>
+
+	{% endfor %}
+	</ul>
+
+{% else %}
+Sorry no blog to show in this category or the category doesn't exist
+{% endif %}
+
+{% endblock %}

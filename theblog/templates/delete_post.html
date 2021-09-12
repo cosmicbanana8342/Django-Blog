@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Delete Blog{% endblock %}
+{% block content %}
+
+{% if user.is_authenticated %}
+	{% if post.author.id == user.id %}
+
+	<h1>Delete Post</h1>
+
+	<br/><br/>
+	<h3>Delete: {{ post.title }}</h3>
+	<br/>
+
+	<div class="form-group">
+	<form method="POST">
+		{% csrf_token %}
+		<strong>Are You sure?</strong><br/><br/>
+		<button class="btn btn-secondary">Delete</button>
+	</form>
+	</div>
+
+	{% else %}
+
+	You are not allowed to delete this post, since you're not the author.
+
+	{% endif %}
+
+{% else %}
+
+You are not allowed here, you must login first.
+
+{% endif %}
+
+{% endblock %}
