@@ -5,93 +5,108 @@
 
 {% block content %}
 
-<h1>{{post.title}}</h1>
+<!-- flex 1 -->
+<div class="card border border-primary col-9 mx-auto">
+	<div class="card-body">
+		<h2 class="card-title">{{post.title}}</h2>
+		<h5 class="card-subtitle mb-2 text-muted">
+			{{post.author.first_name}} 
+			{{post.author.last_name}} - 
+			{{post.post_date}} 
+			{% if user.is_authenticated %}
+				{% if post.author.id == user.id %}
+					<a href="{% url 'update_post' post.pk %}"><span style="color: black; font-size: x-large; padding-right: 5px; padding-left: 10px;" class="fa fa-edit"></span></a>
+					<a href="{% url 'delete_post' post.pk %}"><span style="color: black; font-size: x-large;" class="fa fa-trash"></span></a>
+				{% endif %}
+			{% endif %}
+		</h5>
+		<hr>
+		<br>
+		<div class="card-text">
+			{% if post.header_image %}
+			<img src="{{ post.header_image.url }}">
+			{% endif %}
 
-<small>By: 
-	{{post.author.first_name}} 
-	{{post.author.last_name}} - 
-	
-	{{post.post_date}} 
-	{% if user.is_authenticated %}
-	{% if post.author.id == user.id %}
-	 - <a href="{% url 'update_post' post.pk %}">(Edit)</a>
-	<a href="{% url 'delete_post' post.pk %}">(Delete)</a></small>
-	{% endif %}
+			{{post.body|safe}}
 
-	{% endif %}
-	<br/>
-<hr>
-<br/>
+			<hr>
+			<br>
+			
+			<form action="{% url 'like_post' post.pk %}" method="POST">
+				{% csrf_token %}
 
-{% if post.header_image %}
-	<img src="{{ post.header_image.url }}">
-{% endif %}
+				{% if user.is_authenticated %}
+					<!-- {% if liked %}
+						<button type="submit" name="post_id" value={{ post.id }} class="btn btn-primary btn-small">Unlike</button>
+					{% else %}
+						<button type="submit" name="post_id" value={{ post.id }} class="btn btn-primary btn-small">Like</button>
+					{% endif %} -->
 
-<br/>
-<br/>
-{{post.body|safe}}
+					<button type="submit" name="post_id" value="{{post.id}}" class="btn {% if user in post.likes.all %}btn-danger{% else %}btn-outline-danger{% endif %} btn-sm"><span class="fa fa-heart"></span></button>
 
-<form action="{% url 'like_post' post.pk %}" method="POST">
-	{% csrf_token %}
+				{% else %}
+					<a href="{% url 'login' %}">Login</a> to like
+				{% endif %}
 
-	{% if user.is_authenticated %}
-		<!-- {% if liked %}
-			<button type="submit" name="post_id" value={{ post.id }} class="btn btn-primary btn-small">Unlike</button>
-		{% else %}
-			<button type="submit" name="post_id" value={{ post.id }} class="btn btn-primary btn-small">Like</button>
-		{% endif %} -->
+				 {{ post.likes.count }}
 
-		<button type="submit" name="post_id" value="{{post.id}}" class="btn {% if user in post.likes.all %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">Like</button>
+			</form>
+		</div>
+	</div>
+</div>
 
-	{% else %}
-		<a href="{% url 'login' %}">Login</a> to like
-	{% endif %}
+<br>
 
-	- {{ post.likes.count }} Likes
-
-</form>
-<hr>
-<br/>
-
-<div class="card mb-3">
+<!-- flex 2 -->
+<div class="card col-9 mx-auto">
   <div class="row g-0">
     <div class="col-md-2">
     	{% if post.author.profile.profile_pic %}
-      	<img src="{{ post.author.profile.profile_pic.url }}" class="img-fluid rounded-start">
+      	<img src="{{ post.author.profile.profile_pic.url }}" class="rounded-circle border border-warning border-4" width="150px" height="150px" style="margin: 5px;">
       {% else %}
-      	<img src="{% static 'theblog/images/profile_pic_default.jpg' %}" class="img-fluid rounded-start">
+      	<img src="{% static 'theblog/images/profile_pic_default.jpg' %}" class="rounded-circle border border-warning border-4"  width="150px" height="150px" style="margin: 5px;">
     	{% endif %}
     </div>
     <div class="col-md-10">
       <div class="card-body">
         <h5 class="card-title">
-        	{{post.author.first_name}} 
-        	{{post.author.last_name}}
+			<a style="text-decoration: none;" {% if post.author.profile %} href="{% url 'show_profile_page' post.author.profile.id %}" {% endif %}>
+				{{post.author.first_name}} 
+				{{post.author.last_name}}
+			</a>
         </h5>
         <p class="small text-muted">
 
-        	{% if post.author.profile %}
-	        	<a href="{% url 'show_profile_page' post.author.profile.id %}">Profie Page</a>
-	        {% endif %}
-
         	{% if post.author.profile.website_url %}
-        		 | <a href="{{post.author.profile.website_url}}">Website</a> 
+				<a href="{{post.author.profile.website_url}}"><span style="color: black; font-size: large;" class="fa fa-globe"></span></a> 
         	{% endif %}
         	
         	{% if post.author.profile.facebook_url %}
-        		| <a href="{{post.author.profile.facebook_url}}">Facebook</a>
+        		| <a href="{{post.author.profile.facebook_url}}"><span style="color: black; font-size: large;" class="fa fa-facebook"></span></a>
         	{% endif %}
         	
         	{% if post.author.profile.twitter_url %}
-        		| <a href="{{post.author.profile.twitter_url}}">Twitter</a>
+        		| <a href="{{post.author.profile.twitter_url}}"><span style="color: black; font-size: large;" class="fa fa-twitter"></span></a>
         	{% endif %}
         	
         	{% if post.author.profile.instagram_url %}
-        		| <a href="{{post.author.profile.instagram_url}}">Instagram</a>
+        		| <a href="{{post.author.profile.instagram_url}}"><span style="color: black; font-size: large;" class="fa fa-instagram"></span></a>
+        	{% endif %}
+
+			{% if post.author.profile.github_url %}
+        		| <a href="{{post.author.profile.instagram_url}}"><span style="color: black; font-size: large;" class="fa fa-github"></span></a>
+        	{% endif %}
+
+			{% if post.author.profile.linkedin_url %}
+        		| <a href="{{post.author.profile.instagram_url}}"><span style="color: black; font-size: large;" class="fa fa-linkedin"></span></a>
+        	{% endif %}
+
+			{% if post.author.profile.youtube_url %}
+        		| <a href="{{post.author.profile.instagram_url}}"><span style="color: black; font-size: large;" class="fa fa-youtube"></span></a>
         	{% endif %}
         	
         	{% if post.author.profile.pinterest_url %}
-        		| <a href="{{post.author.profile.pinterest_url}}">Pinterest</a>
+        		| <a href="{{post.author.profile.pinterest_url}}"><span style="color: black; font-size: large;" class="fa fa-pinterest"></span></a>
         	{% endif %}
         </p>
         <p class="card-text">{{ post.author.profile.bio }}</p>
@@ -100,23 +115,34 @@
   </div>
 </div>
 
-<h2>Comments</h2>
-{% if not post.comments.all %}
-	No comments yet... <a href="{% url 'add_comment' post.pk %}">Add one</a>
-	<br><br>
-{% else %}
-<a href="{% url 'add_comment' post.pk %}">Add Comment</a>
+<br>
+<!-- flex 3 -->
+<div class="accordion col-9 mx-auto" id="accordionExample">
+	<div class="accordion-item">
+		<h2 class="accordion-header" id="headingOne">
+			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+				Comments
+			</button>
+		</h2>
+	<div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+		<div class="accordion-body">
+			{% if not post.comments.all %}
+			No comments yet... <a class="btn btn-warning" href="{% url 'add_comment' post.pk %}">Add one</a>
+			<br><br>
+			{% else %}
+			<a class="btn btn-warning" href="{% url 'add_comment' post.pk %}">Add Comment</a>
+			<br><br>
+			{% for comment in post.comments.all %}
+			<strong>{{ comment.name }}</strong> - <small>{{ comment.date_added }}</small>
+			<br/>
+			{{ comment.body }}
+			<br><br>
+			{% endfor %}
+			<a class="btn btn-warning" href="{% url 'add_comment' post.pk %}">Add Comment</a>
+			<br><br>
+			{% endif %}	
+		</div>
+	</div>
+</div>
 <br><br>
-	{% for comment in post.comments.all %}
-		<strong>{{ comment.name }}</strong> - <small>{{ comment.date_added }}</small>
-		<br/>
-		{{ comment.body }}
-		<br><br>
-	{% endfor %}
-	<a href="{% url 'add_comment' post.pk %}">Add Comment</a>
-	<br><br>
-{% endif %}
-
-<!-- <img src="{{ post.author.profile.profile_pic.url }}" width="100" height="100" class="rounded-circle"> -->
-
 {% endblock %}
