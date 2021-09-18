@@ -43,12 +43,13 @@
 					{% endif %} -->
 
 					<button type="submit" name="post_id" value="{{post.id}}" class="btn {% if user in post.likes.all %}btn-danger{% else %}btn-outline-danger{% endif %} btn-sm"><span class="fa fa-heart"></span></button>
+					{{ post.likes.count }}
 
 				{% else %}
-					<a href="{% url 'login' %}">Login</a> to like
+					<a class="btn btn-primary" href="{% url 'login' %}">Login</a> to like
 				{% endif %}
 
-				 {{ post.likes.count }}
+				 
 
 			</form>
 		</div>

@@ -6,7 +6,7 @@ from theblog.models import Profile
 class ProfilePageForm(forms.ModelForm):
 	class Meta:
 		model = Profile
-		fields = ('bio', 'profile_pic', 'website_url', 'facebook_url', 'twitter_url', 'instagram_url', 'pinterest_url')
+		fields = ('bio', 'profile_pic', 'website_url', 'facebook_url', 'twitter_url', 'instagram_url', 'github_url','linkedin_url', 'youtube_url', 'pinterest_url')
 		widgets = {
 			'bio': forms.Textarea(attrs={'class': 'form-control'}),
 			# 'profile_pic': forms.TextInput(attrs={'class': 'form-control'}),
@@ -14,13 +14,16 @@ class ProfilePageForm(forms.ModelForm):
 			'facebook_url': forms.TextInput(attrs={'class': 'form-control'}),
 			'twitter_url': forms.TextInput(attrs={'class': 'form-control'}),
 			'instagram_url': forms.TextInput(attrs={'class': 'form-control'}),
+			'github_url': forms.TextInput(attrs={'class': 'form-control'}),
+			'linkedin_url': forms.TextInput(attrs={'class': 'form-control'}),
+			'youtube_url': forms.TextInput(attrs={'class': 'form-control'}),
 			'pinterest_url': forms.TextInput(attrs={'class': 'form-control'}),
 		}
 
 class ProfilePageEditForm(forms.ModelForm):
 	class Meta:
 		model = Profile
-		fields = ('bio', 'profile_pic', 'website_url', 'facebook_url', 'twitter_url', 'instagram_url', 'pinterest_url')
+		fields = ('bio', 'profile_pic', 'website_url', 'facebook_url', 'twitter_url', 'instagram_url', 'github_url','linkedin_url', 'youtube_url', 'pinterest_url')
 		widgets = {
 			'bio': forms.Textarea(attrs={'class': 'form-control'}),
 			# 'profile_pic': forms.TextInput(attrs={'class': 'form-control'}),
@@ -28,6 +31,9 @@ class ProfilePageEditForm(forms.ModelForm):
 			'facebook_url': forms.TextInput(attrs={'class': 'form-control'}),
 			'twitter_url': forms.TextInput(attrs={'class': 'form-control'}),
 			'instagram_url': forms.TextInput(attrs={'class': 'form-control'}),
+			'github_url': forms.TextInput(attrs={'class': 'form-control'}),
+			'linkedin_url': forms.TextInput(attrs={'class': 'form-control'}),
+			'youtube_url': forms.TextInput(attrs={'class': 'form-control'}),
 			'pinterest_url': forms.TextInput(attrs={'class': 'form-control'}),
 		}
 

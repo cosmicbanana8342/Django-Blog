@@ -21,6 +21,9 @@ class Profile(models.Model):
 	facebook_url = models.CharField(max_length=255, null=True, blank=True)
 	twitter_url = models.CharField(max_length=255, null=True, blank=True)
 	instagram_url = models.CharField(max_length=255, null=True, blank=True)
+	github_url = models.CharField(max_length=255, null=True, blank=True)
+	linkedin_url = models.CharField(max_length=255, null=True, blank=True)
+	youtube_url = models.CharField(max_length=255, null=True, blank=True)
 	pinterest_url = models.CharField(max_length=255, null=True, blank=True)
 
 	def __str__(self):
